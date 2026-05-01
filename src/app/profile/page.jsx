@@ -2,10 +2,15 @@
 import { UpdateUserModal } from '@/components/UpdateUserModal';
 import { authClient } from '@/lib/auth-client';
 import { Avatar, Card } from '@heroui/react';
+import { redirect } from 'next/dist/server/api-utils';
 const ProfilePage = () => {
     const userData = authClient.useSession();
     const user = userData.data?.user;
-    console.log(user);
+    // console.log(user);
+    // if (!user) {
+    //     redirect('/signin')------>NOT Secure
+    // }
+
     return (
         <div>
             <Card className='max-w-96 mx-auto flex flex-col items-center'>
