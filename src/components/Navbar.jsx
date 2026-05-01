@@ -55,8 +55,20 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { HiMenuAlt3, HiX } from "react-icons/hi"; // Using your react-icons
+import { authClient } from "@/lib/auth-client";
+import { Avatar, Button } from "@heroui/react";
 
 const Navbar = () => {
+
+  const userData = authClient.useSession();
+  const user = userData.data?.user;
+  console.log(user);
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+  }
+
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
@@ -70,7 +82,7 @@ const Navbar = () => {
     <nav className="relative w-full border-b border-gray-100 bg-white/80 backdrop-blur-md z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           {/* 1. Logo Section */}
           <div className="flex-shrink-0 flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
@@ -101,15 +113,26 @@ const Navbar = () => {
 
           {/* 3. Desktop Auth Buttons (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/signin" className="text-sm font-medium text-gray-600">
+            {!user && <><Link href="/signin" className="text-sm font-medium text-gray-600">
               SignIn
             </Link>
-            <Link
-              href="/signup"
-              className="px-5 py-2 bg-linear-to-r from-pink-500 via-purple-500 bg-red-500 text-white rounded-full text-sm font-bold hover:from-pink-700 hover:via-purple-700 hover:to-red-700 transition-all shadow-md"
-            >
-              SignUp
-            </Link>
+              <Link
+                href="/signup"
+                className="px-5 py-2 bg-linear-to-r from-pink-500 via-purple-500 bg-red-500 text-white rounded-full text-sm font-bold hover:from-pink-700 hover:via-purple-700 hover:to-red-700 transition-all shadow-md"
+              >
+                SignUp
+              </Link></>}
+            {user && <div className="flex items-center gap-2">
+              <p className="text-sm">Hi ! {user?.name}</p>
+              <Avatar size="sm">
+                <Avatar.Image
+                  alt={user?.name}
+                  src={user?.image}
+                  referrerPolicy="no-referrer" />
+                <Avatar.Fallback>{user?.name.charAt(0)}</Avatar.Fallback>
+              </Avatar>
+              <Button onClick={handleSignOut} size="sm" variant="danger-soft" >SignOut</Button>
+            </div>}
           </div>
 
           {/* 4. Mobile Menu Button */}
@@ -138,7 +161,17 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
-            <div className="pt-4 flex flex-col gap-3 px-3">
+            {user ? <div className="flex flex-col items-center gap-2">
+              <Avatar size="sm">
+                <Avatar.Image
+                  alt={user?.name}
+                  src={user?.image}
+                  referrerPolicy="no-referrer" />
+                <Avatar.Fallback>{user?.name.charAt(0)}</Avatar.Fallback>
+              </Avatar>
+              <p className="text-sm">Hi ! {user?.name}</p>
+              <Button onClick={handleSignOut} size="sm" variant="danger-soft" >SignOut</Button>
+            </div> : <div className="pt-4 flex flex-col gap-3 px-3">
               <Link
                 href="/signin"
                 onClick={() => setIsMenuOpen(false)}
@@ -153,7 +186,7 @@ const Navbar = () => {
               >
                 SignUp
               </Link>
-            </div>
+            </div>}
           </div>
         </div>
       )}
