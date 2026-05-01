@@ -106,7 +106,7 @@ const Navbar = () => {
             </Link>
             <Link
               href="/signup"
-              className="px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-bold hover:bg-blue-700 transition-all shadow-md"
+              className="px-5 py-2 bg-linear-to-r from-pink-500 via-purple-500 bg-red-500 text-white rounded-full text-sm font-bold hover:from-pink-700 hover:via-purple-700 hover:to-red-700 transition-all shadow-md"
             >
               SignUp
             </Link>
@@ -149,7 +149,7 @@ const Navbar = () => {
               <Link
                 href="/signup"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-center py-3 bg-blue-600 text-white rounded-xl font-bold"
+                className="text-center py-3 bg-linear-to-r from-pink-500 via-purple-500 bg-red-500 text-white rounded-xl font-bold"
               >
                 SignUp
               </Link>
